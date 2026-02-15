@@ -1,4 +1,4 @@
-// TodoModel (Data Layer)
+import 'package:clean_todo/features/todo/data/datasources/todo_db_helper.dart';
 import 'package:clean_todo/features/todo/domain/entities/todo_task.dart';
 
 class TodoModel extends TodoTask {
@@ -8,27 +8,34 @@ class TodoModel extends TodoTask {
     super.description,
     required super.isCompleted,
     required super.createdAt,
+    super.priority = TodoPriority.medium,
+    super.dueDate,
   });
 
   factory TodoModel.fromMap(Map<String, dynamic> map) {
-    final isCompletedValue = map['is_completed'];
     return TodoModel(
-      id: map['id'] as int?,
-      title: map['title'] as String,
-      description: map['desscription'] as String?,
-      isCompleted:
-          (isCompletedValue == null ? 0 : isCompletedValue as int) == 1,
-      createdAt: DateTime.parse(map['created_at'] as String),
+      id: map[TodoDbHelper.colId] as int?,
+      title: map[TodoDbHelper.colTitle] as String,
+      description: map[TodoDbHelper.colDescription] as String?,
+      isCompleted: (map[TodoDbHelper.colIsCompleted] as int) == 1,
+      createdAt: DateTime.parse(map[TodoDbHelper.colCreatedAt] as String),
+      priority:
+          TodoPriority.values[(map[TodoDbHelper.colPriority] as int?) ?? 1],
+      dueDate: (map[TodoDbHelper.colDueDate] as String?) == null
+          ? null
+          : DateTime.parse(map[TodoDbHelper.colDueDate] as String),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'title': title,
-      'description': description,
-      'is_completed': isCompleted ? 1 : 0,
-      'created_at': createdAt.toIso8601String(),
+      TodoDbHelper.colId: id,
+      TodoDbHelper.colTitle: title,
+      TodoDbHelper.colDescription: description,
+      TodoDbHelper.colIsCompleted: isCompleted ? 1 : 0,
+      TodoDbHelper.colCreatedAt: createdAt.toIso8601String(),
+      TodoDbHelper.colPriority: priority.index,
+      TodoDbHelper.colDueDate: dueDate?.toIso8601String(),
     };
   }
 
@@ -39,6 +46,8 @@ class TodoModel extends TodoTask {
       description: description,
       isCompleted: isCompleted,
       createdAt: createdAt,
+      priority: priority,
+      dueDate: dueDate,
     );
   }
 
@@ -49,6 +58,8 @@ class TodoModel extends TodoTask {
       description: task.description,
       isCompleted: task.isCompleted,
       createdAt: task.createdAt,
+      priority: task.priority,
+      dueDate: task.dueDate,
     );
   }
 }

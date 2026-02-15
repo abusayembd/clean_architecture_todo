@@ -36,7 +36,7 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
 
       final id = await db.insert(
         TodoDbHelper.tableTodos,
-        model.toMap()..remove('id'),
+        model.toMap()..remove(TodoDbHelper.colId),
       );
 
       return TodoModel(
@@ -45,6 +45,8 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
         description: model.description,
         isCompleted: model.isCompleted,
         createdAt: model.createdAt,
+         priority: model.priority,
+        dueDate: model.dueDate,
       );
     } catch (e) {
       throw DatabaseException("Failed to add todo");
@@ -107,6 +109,8 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
       description: todo.description,
       isCompleted: !todo.isCompleted,
       createdAt: todo.createdAt,
+      priority: todo.priority,
+      dueDate: todo.dueDate,
     );
 
     await updateTodo(updated);
