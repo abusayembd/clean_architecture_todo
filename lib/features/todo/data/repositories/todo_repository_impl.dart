@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error/exceptions.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/entities/todo_task.dart';
-import '../../domain/repositories/todo_repository.dart';
-import '../datasources/todo_local_datasource.dart';
-import '../models/todo_model.dart';
+import 'package:clean_todo/core/error/exceptions.dart';
+import 'package:clean_todo/core/error/failures.dart';
+import 'package:clean_todo/features/todo/domain/entities/todo_task.dart';
+import 'package:clean_todo/features/todo/domain/repositories/todo_repository.dart';
+import 'package:clean_todo/features/todo/data/datasources/todo_local_datasource.dart';
+import 'package:clean_todo/features/todo/data/models/todo_model.dart';
 
 class TodoRepositoryImpl implements TodoRepository {
   final TodoLocalDataSource localDataSource;
@@ -27,7 +27,9 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<Either<Failure, TodoTask>> addTodo(TodoTask task) async {
     try {
-      final inserted = await localDataSource.addTodo(TodoModel.fromEntity(task));
+      final inserted = await localDataSource.addTodo(
+        TodoModel.fromEntity(task),
+      );
       return Right(inserted);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
@@ -63,8 +65,9 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<Either<Failure, TodoTask>> updateTodo(TodoTask task) async {
     try {
-      final updated =
-          await localDataSource.updateTodo(TodoModel.fromEntity(task));
+      final updated = await localDataSource.updateTodo(
+        TodoModel.fromEntity(task),
+      );
       return Right(updated);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));

@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../entities/todo_task.dart';
-import '../repositories/todo_repository.dart';
+import 'package:clean_todo/core/error/failures.dart';
+import 'package:clean_todo/core/usecase/usecase.dart';
+import 'package:clean_todo/features/todo/domain/entities/todo_task.dart';
+import 'package:clean_todo/features/todo/domain/repositories/todo_repository.dart';
 
 class ToggleComplete implements UseCase<Either<Failure, TodoTask>, int> {
   final TodoRepository repository;

@@ -1,5 +1,1 @@
-enum TodoFilter {
-  all,
-  pending,
-  completed,
-}
+enum TodoFilter { all, pending, completed }

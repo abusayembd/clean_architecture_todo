@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../repositories/todo_repository.dart';
+import 'package:clean_todo/core/error/failures.dart';
+import 'package:clean_todo/core/usecase/usecase.dart';
+import 'package:clean_todo/features/todo/domain/repositories/todo_repository.dart';
 
 class DeleteTodo implements UseCase<Either<Failure, void>, int> {
   final TodoRepository repository;

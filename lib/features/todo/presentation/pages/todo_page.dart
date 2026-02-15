@@ -2,10 +2,10 @@ import 'package:clean_todo/features/todo/presentation/pages/todo_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/todo_task.dart';
-import '../bloc/todo_bloc.dart';
-import '../bloc/todo_event.dart';
-import '../bloc/todo_state.dart';
+import 'package:clean_todo/features/todo/domain/entities/todo_task.dart';
+import 'package:clean_todo/features/todo/presentation/bloc/todo_bloc.dart';
+import 'package:clean_todo/features/todo/presentation/bloc/todo_event.dart';
+import 'package:clean_todo/features/todo/presentation/bloc/todo_state.dart';
 
 class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
@@ -17,15 +17,11 @@ class TodoPage extends StatefulWidget {
 class _TodoPageState extends State<TodoPage> {
   TodoFilter _filter = TodoFilter.all;
   String _searchQuery = "";
-  @override
-  void initState() {
-    super.initState();
-
-    // Load todos when page opens
-    Future.microtask(() {
-      context.read<TodoBloc>().add(LoadTodosEvent());
-    });
-  }
+@override
+void initState() {
+  super.initState();
+  context.read<TodoBloc>().add(LoadTodosEvent());
+}
 
   void _showAddTodoDialog() {
     final titleController = TextEditingController();

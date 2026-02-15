@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error/failures.dart';
-import '../entities/todo_task.dart';
+import 'package:clean_todo/core/error/failures.dart';
+import 'package:clean_todo/features/todo/domain/entities/todo_task.dart';
 
 abstract class TodoRepository {
   Future<Either<Failure, List<TodoTask>>> getAllTodos();

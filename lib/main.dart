@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'features/todo/presentation/bloc/todo_bloc.dart';
-import 'features/todo/presentation/pages/todo_page.dart';
-import 'injection_container.dart' as di;
-import 'injection_container.dart';
+import 'package:clean_todo/features/todo/presentation/bloc/todo_bloc.dart';
+import 'package:clean_todo/features/todo/presentation/pages/todo_page.dart';
+import 'package:clean_todo/injection_container.dart' as di;
+import 'package:clean_todo/injection_container.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

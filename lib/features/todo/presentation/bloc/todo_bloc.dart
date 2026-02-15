@@ -1,14 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/usecase/usecase.dart';
-import '../../domain/entities/todo_task.dart';
-import '../../domain/usecases/add_todo.dart';
-import '../../domain/usecases/delete_todo.dart';
-import '../../domain/usecases/get_all_todos.dart';
-import '../../domain/usecases/toggle_complete.dart';
-import '../../domain/usecases/update_todo.dart';
-import 'todo_event.dart';
-import 'todo_state.dart';
+import 'package:clean_todo/core/usecase/usecase.dart';
+import 'package:clean_todo/features/todo/domain/entities/todo_task.dart';
+import 'package:clean_todo/features/todo/domain/usecases/add_todo.dart';
+import 'package:clean_todo/features/todo/domain/usecases/delete_todo.dart';
+import 'package:clean_todo/features/todo/domain/usecases/get_all_todos.dart';
+import 'package:clean_todo/features/todo/domain/usecases/toggle_complete.dart';
+import 'package:clean_todo/features/todo/domain/usecases/update_todo.dart';
+import 'package:clean_todo/features/todo/presentation/bloc/todo_event.dart';
+import 'package:clean_todo/features/todo/presentation/bloc/todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final GetAllTodos getAllTodos;
@@ -51,22 +51,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     );
   }
 
-  Future<void> _onAddTodo(
-    AddTodoEvent event,
-    Emitter<TodoState> emit,
-  ) async {
+  Future<void> _onAddTodo(AddTodoEvent event, Emitter<TodoState> emit) async {
     final oldTodos = _currentTodos(state);
 
     final result = await addTodo(event.task);
 
-    result.fold(
-      (failure) => emit(TodoError(failure.message)),
-      (insertedTodo) {
-        // Update list locally (NO reload)
-        final updated = [insertedTodo, ...oldTodos];
-        emit(TodoLoaded(updated));
-      },
-    );
+    result.fold((failure) => emit(TodoError(failure.message)), (insertedTodo) {
+      // Update list locally (NO reload)
+      final updated = [insertedTodo, ...oldTodos];
+      emit(TodoLoaded(updated));
+    });
   }
 
   Future<void> _onUpdateTodo(
@@ -77,16 +71,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
     final result = await updateTodo(event.task);
 
-    result.fold(
-      (failure) => emit(TodoError(failure.message)),
-      (updatedTodo) {
-        final updated = oldTodos.map((t) {
-          return (t.id == updatedTodo.id) ? updatedTodo : t;
-        }).toList();
+    result.fold((failure) => emit(TodoError(failure.message)), (updatedTodo) {
+      final updated = oldTodos.map((t) {
+        return (t.id == updatedTodo.id) ? updatedTodo : t;
+      }).toList();
 
-        emit(TodoLoaded(updated));
-      },
-    );
+      emit(TodoLoaded(updated));
+    });
   }
 
   Future<void> _onDeleteTodo(
@@ -97,13 +88,10 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
     final result = await deleteTodo(event.id);
 
-    result.fold(
-      (failure) => emit(TodoError(failure.message)),
-      (_) {
-        final updated = oldTodos.where((t) => t.id != event.id).toList();
-        emit(TodoLoaded(updated));
-      },
-    );
+    result.fold((failure) => emit(TodoError(failure.message)), (_) {
+      final updated = oldTodos.where((t) => t.id != event.id).toList();
+      emit(TodoLoaded(updated));
+    });
   }
 
   Future<void> _onToggleComplete(
@@ -114,15 +102,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
     final result = await toggleComplete(event.id);
 
-    result.fold(
-      (failure) => emit(TodoError(failure.message)),
-      (updatedTodo) {
-        final updated = oldTodos.map((t) {
-          return (t.id == updatedTodo.id) ? updatedTodo : t;
-        }).toList();
+    result.fold((failure) => emit(TodoError(failure.message)), (updatedTodo) {
+      final updated = oldTodos.map((t) {
+        return (t.id == updatedTodo.id) ? updatedTodo : t;
+      }).toList();
 
-        emit(TodoLoaded(updated));
-      },
-    );
+      emit(TodoLoaded(updated));
+    });
   }
 }

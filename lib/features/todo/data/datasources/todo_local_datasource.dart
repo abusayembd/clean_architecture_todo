@@ -1,7 +1,7 @@
 import 'package:clean_todo/features/todo/data/datasources/todo_db_helper.dart';
 import 'package:clean_todo/features/todo/data/models/todo_model.dart';
 
-import '../../../../core/error/exceptions.dart';
+import 'package:clean_todo/core/error/exceptions.dart';
 
 abstract class TodoLocalDataSource {
   Future<List<TodoModel>> getAllTodos();
@@ -17,64 +17,70 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   TodoLocalDataSourceImpl(this.dbHelper);
   @override
   Future<List<TodoModel>> getAllTodos() async {
-    try 
-      {final db = await dbHelper.database;
-    final result = await db.query(
-      TodoDbHelper.tableTodos,
-      orderBy: '${TodoDbHelper.colCreatedAt} DESC',
-    );
-    return result.map((e) => TodoModel.fromMap(e)).toList();}
-  catch(e){
-     throw DatabaseException("Failed to load todos");
-  }
+    try {
+      final db = await dbHelper.database;
+      final result = await db.query(
+        TodoDbHelper.tableTodos,
+        orderBy: '${TodoDbHelper.colCreatedAt} DESC',
+      );
+      return result.map((e) => TodoModel.fromMap(e)).toList();
+    } catch (e) {
+      throw DatabaseException("Failed to load todos");
+    }
   }
 
   @override
   Future<TodoModel> addTodo(TodoModel model) async {
-    try{final db = await dbHelper.database;
+    try {
+      final db = await dbHelper.database;
 
-    final id = await db.insert(
-      TodoDbHelper.tableTodos,
-      model.toMap()..remove('id'),
-    );
+      final id = await db.insert(
+        TodoDbHelper.tableTodos,
+        model.toMap()..remove('id'),
+      );
 
-    return TodoModel(
-      id: id,
-      title: model.title,
-      description: model.description,
-      isCompleted: model.isCompleted,
-      createdAt: model.createdAt,
-    );}catch(e){
-       throw DatabaseException("Failed to add todo");
+      return TodoModel(
+        id: id,
+        title: model.title,
+        description: model.description,
+        isCompleted: model.isCompleted,
+        createdAt: model.createdAt,
+      );
+    } catch (e) {
+      throw DatabaseException("Failed to add todo");
     }
   }
 
   @override
   Future<void> deleteTodo(int id) async {
-    try{final db = await dbHelper.database;
+    try {
+      final db = await dbHelper.database;
 
-    await db.delete(
-      TodoDbHelper.tableTodos,
-      where: '${TodoDbHelper.colId} = ?',
-      whereArgs: [id],
-    );}catch(e){
-       throw DatabaseException("Failed to delete todo");
+      await db.delete(
+        TodoDbHelper.tableTodos,
+        where: '${TodoDbHelper.colId} = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      throw DatabaseException("Failed to delete todo");
     }
   }
 
   @override
   Future<TodoModel> updateTodo(TodoModel model) async {
-    try{final db = await dbHelper.database;
+    try {
+      final db = await dbHelper.database;
 
-    await db.update(
-      TodoDbHelper.tableTodos,
-      model.toMap()..remove('id'),
-      where: '${TodoDbHelper.colId} = ?',
-      whereArgs: [model.id],
-    );
+      await db.update(
+        TodoDbHelper.tableTodos,
+        model.toMap()..remove('id'),
+        where: '${TodoDbHelper.colId} = ?',
+        whereArgs: [model.id],
+      );
 
-    return model;}catch(e){
-       throw DatabaseException("Failed to update todo");
+      return model;
+    } catch (e) {
+      throw DatabaseException("Failed to update todo");
     }
   }
 
